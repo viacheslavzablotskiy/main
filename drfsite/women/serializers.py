@@ -1,10 +1,11 @@
 import io
 
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from .models import Women, Comment, Like
+from .models import Women, Comment, Like, Category
 
 
 # class WomenModel:
@@ -14,11 +15,19 @@ from .models import Women, Comment, Like
 
 
 class WomenSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
+    owner = serializers.ReadOnlyField(source='owner.username')
+    # comment = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     class Meta:
         model = Women
         fields = '__all__'
+
+class CategorySerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    # posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    class Meta:
+        model = Category
+        fields = '__all__'
+
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -30,6 +39,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class LikeSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Like
@@ -66,3 +76,22 @@ class LikeSerializer(serializers.ModelSerializer):
 #     serializers = WomenSerializer(data=data)
 #     serializers.is_valid()
 #     print(serializers.validated_data)
+
+
+# class UserSerializer(serializers.ModelSerializer):
+#     posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+#     comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+#
+#     class Meta:
+#         model = User
+#         fields = '__all__'
+
+
+
+# class UserSerializer(serializers.ModelSerializer):
+#     posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+#     comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+#
+#     class Meta:
+#         model = User
+#         fields = '__all__'

@@ -61,8 +61,6 @@ class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticated,)
-
-
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -87,6 +85,8 @@ class UserBookL(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated, )
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
+
+
     # lookup_field = 'book'
 
     # def get_object(self):
